@@ -104,8 +104,22 @@ powershell -File scripts/e2e-eurokey.ps1 -Lang de   # ép Deutsch
 - Tự **skip** khi: chưa đặt `EUROKEY_E2E=1`, app đang chạy, thiếu Chrome/Edge,
   hoặc không đưa được cửa sổ browser lên foreground.
 
-Trạng thái: harness **biên dịch + chạy + skip đúng** khi app đang mở. **Chưa có
-lượt PASS thật** vì app đang chạy lúc kiểm thử — cần đóng app rồi chạy lại.
+Trạng thái: **PASS trên CI** (GitHub Actions `e2e`, windows-latest, run `38906090014`):
+
+```
+language: Deutsch — typing 5 sequences
+  "\"a" -> "ä" OK
+  "\"o" -> "ö" OK
+  "\"u" -> "ü" OK
+  "\"s" -> "ß" OK
+  "\"S" -> "ẞ" OK
+ok  eurokey/e2e
+```
+
+Vậy CI thật sự kiểm tra end-to-end: build app → hook Windows được cài → gõ qua
+`SendInput` (magic) → đọc lại đúng ký tự trong Chromium. Runner windows-latest có
+desktop tương tác (e2e `SetForegroundWindow` được), nên UI test `TestUi` cũng chạy
+chứ không skip.
 
 ### E2E thủ công (dự phòng)
 
@@ -157,7 +171,8 @@ IBus thật để xác nhận commit/preedit. Không claim IBus đã chạy.
 
 - **Chưa xem screenshot** cửa sổ Cài đặt/tray/HUD → chưa chứng minh layout đúng.
   Build + test không thay được kiểm tra thị giác.
-- **Chưa chạy e2e gõ thật** bằng tay ở mọi app; chỉ mới unit + UI in-process.
+- e2e gõ thật đã chạy trên CI cho **Deutsch**; Français/Español và các app đích
+  khác (Word, trình duyệt thật) chưa phủ hết.
 - Icon/mascot vẫn là của Tui Gõ (chưa rebrand); `rsrc_amd64.syso` chưa regenerate.
 
 Lịch sử chạy:
@@ -170,3 +185,4 @@ Lịch sử chạy:
 | 2026-10-16 | GitHub Actions `build` (push main) | PASS — test + build amd64/arm64 |
 | 2026-10-16 | GitHub Actions `release` (tag `v0.1.0`) | PASS — 2 zip assets |
 | 2026-10-16 | Linux port: `go test ./config ./internal/session` + cross build | PASS (chưa chạy IBus) |
+| 2026-10-16 | GitHub Actions run `38906090014` (test + e2e + linux + build×2) | PASS — e2e typed `"a→ä … "S→ẞ` |
