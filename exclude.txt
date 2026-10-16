@@ -1,0 +1,8 @@
+; EuroKey — excluded apps (one .exe name per line)
+;   notepad.exe        keys pass through; the toggle key turns the language
+;                      on for THIS app only
+;   notepad.exe|lock   hard-off: all keys pass through, toggle ignored
+;   notepad.exe|clip   send text via clipboard paste in this app
+;   editor.exe|de      force Deutsch in this app (fr and es too)
+;   editor.exe|safedel selection-safe delete (autocomplete fields)
+;   editor.exe|de,clip flags combine with commas

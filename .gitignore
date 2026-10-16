@@ -1,0 +1,17 @@
+build/
+*.exe
+*.exe~
+*.obj
+*.lib
+*.exp
+*.pdb
+version.txt
+update-stamp.txt
+
+# runtime / per-user data (portable app writes these next to the exe)
+eurokey.ini
+tuigo.ini
+macro.txt
+
+# e2e failure screenshot
+e2e-fail.png
