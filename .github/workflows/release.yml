@@ -21,12 +21,19 @@ jobs:
       - name: Test
         run: go test ./... -count=1 -skip 'TestUi'
 
+      - name: Resolve version
+        id: ver
+        shell: pwsh
+        run: |
+          $v = "${{ github.ref_name }}".TrimStart('v')
+          "version=$v" >> $env:GITHUB_OUTPUT
+
       - name: Build amd64
         env:
           GOOS: windows
           GOARCH: amd64
           CGO_ENABLED: "0"
-        run: go build -trimpath -ldflags "-H windowsgui -s -w -X main.appVersion=${{ github.ref_name }}" -o eurokey.exe .
+        run: go build -trimpath -ldflags "-H windowsgui -s -w -X main.appVersion=${{ steps.ver.outputs.version }}" -o eurokey.exe .
       - name: Package amd64
         run: Compress-Archive -Force -Path eurokey.exe,exclude.txt,README.md -DestinationPath eurokey-${{ github.ref_name }}-windows-amd64.zip
 
@@ -37,7 +44,7 @@ jobs:
           CGO_ENABLED: "0"
         run: |
           go run github.com/akavel/rsrc@v0.10.2 -arch arm64 -manifest app.manifest -ico app.ico -o rsrc_arm64.syso
-          go build -trimpath -ldflags "-H windowsgui -s -w -X main.appVersion=${{ github.ref_name }}" -o eurokey.exe .
+          go build -trimpath -ldflags "-H windowsgui -s -w -X main.appVersion=${{ steps.ver.outputs.version }}" -o eurokey.exe .
       - name: Package arm64
         run: Compress-Archive -Force -Path eurokey.exe,exclude.txt,README.md -DestinationPath eurokey-${{ github.ref_name }}-windows-arm64.zip
 
