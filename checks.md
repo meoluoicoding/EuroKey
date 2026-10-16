@@ -144,3 +144,5 @@ Lịch sử chạy:
 | 2026-10-16 | `go test ./...` | PASS (engine + shell) |
 | 2026-10-16 | `go test . -run TestUi -v` | PASS (3 nhóm UI) |
 | 2026-10-16 | `go build -o eurokey.exe .` | PASS |
+| 2026-10-16 | GitHub Actions `build` (push main) | PASS — test + build amd64/arm64 |
+| 2026-10-16 | GitHub Actions `release` (tag `v0.1.0`) | PASS — 2 zip assets |
