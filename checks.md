@@ -145,6 +145,7 @@ Kết quả (2026-10-16, cross-compile từ Windows):
 | `go test ./config/ ./internal/session/` | PASS (native, không cần Linux) |
 | `GOOS=linux go vet ./...` | PASS |
 | build `dist/eurokey-ibus` (amd64) + `dist/eurokey-ibus-arm64` | PASS |
+| GitHub Actions job `linux` (ubuntu-latest, `scripts/check-linux.sh`) | PASS |
 
 Test phủ: session (compose DE/FR/ES, flush dead key, backspace, macro, pass-through
 khi tắt), config (defaults, round-trip, giữ key lạ, toggle keys).
