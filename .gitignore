@@ -15,3 +15,6 @@ macro.txt
 
 # e2e failure screenshot
 e2e-fail.png
+
+# linux build output
+linux/dist/

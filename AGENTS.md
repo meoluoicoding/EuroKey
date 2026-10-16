@@ -17,9 +17,10 @@ redistributing.
 
 ```
 .                 Go package main — Win32 shell (Windows only)
-engine/           pure-Go compose engine + tests, no Windows deps
+engine/           pure-Go compose engine + tests, no platform deps
+linux/            separate module — IBus engine (Go), reuses engine/
 e2e/              separate module (go-rod) end-to-end typing harness
-scripts/          check-eurokey.ps1, e2e-eurokey.ps1
+scripts/          check-eurokey.ps1, check-linux.sh, e2e-eurokey.ps1
 ```
 
 Shell files: `main.go` (lifecycle, hook install, watchdog), `hook.go`
@@ -42,6 +43,26 @@ powershell -File scripts/e2e-eurokey.ps1 -Lang de
 ```
 
 `checks.md` records pass/fail and evidence. Keep it updated.
+
+## Linux (IBus) port
+
+`linux/` is a separate module (`eurokey-linux`, `replace eurokey => ../`):
+
+- `cmd/eurokey-ibus` — the IBus engine daemon.
+- `internal/session` — keeps the composing word in preedit, because IBus cannot
+  delete already-committed text. A dead-key hold produces no output; a
+  combination or macro is committed at the next word boundary; a plain
+  boundary char commits the word and is forwarded to the app.
+- `config` — `~/.config/eurokey/eurokey.ini` + `macro.txt` (same key names as
+  Windows: `Enabled`, `Language`, `MacroEnabled`, `AutoCap`).
+
+```sh
+sh scripts/check-linux.sh   # on Ubuntu: vet + tests + cross build
+```
+
+`config` and `internal/session` are pure Go, so their tests also run on Windows;
+only the IBus daemon itself needs Linux. Runtime IBus behavior is not verified
+by a cross build — do not claim it works without running it on Linux.
 
 ## Engine contract
 

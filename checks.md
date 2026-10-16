@@ -130,6 +130,28 @@ số khác 0, phím do `SendInput` gắn đúng `dwExtraInfo = magic` sẽ đư�
 **như phím thật** (đi qua engine + probe + injection). Có thể viết driver Go/PS
 gửi phím vào cửa sổ đích rồi đọc lại nội dung để e2e thật. Hiện chưa có driver.
 
+## Linux (IBus port)
+
+```sh
+cd linux
+go test ./config/ ./internal/session/          # pure Go — chạy cả trên Windows/CI
+sh scripts/check-linux.sh                      # trên Ubuntu: vet + test + build amd64/arm64
+```
+
+Kết quả (2026-10-16, cross-compile từ Windows):
+
+| Bước | Kết quả |
+|---|---|
+| `go test ./config/ ./internal/session/` | PASS (native, không cần Linux) |
+| `GOOS=linux go vet ./...` | PASS |
+| build `dist/eurokey-ibus` (amd64) + `dist/eurokey-ibus-arm64` | PASS |
+
+Test phủ: session (compose DE/FR/ES, flush dead key, backspace, macro, pass-through
+khi tắt), config (defaults, round-trip, giữ key lạ, toggle keys).
+
+**Chưa verify runtime trên Ubuntu** — cross build chỉ chứng minh biên dịch; cần
+IBus thật để xác nhận commit/preedit. Không claim IBus đã chạy.
+
 ## Chưa xác minh (unresolved)
 
 - **Chưa xem screenshot** cửa sổ Cài đặt/tray/HUD → chưa chứng minh layout đúng.
@@ -146,3 +168,4 @@ Lịch sử chạy:
 | 2026-10-16 | `go build -o eurokey.exe .` | PASS |
 | 2026-10-16 | GitHub Actions `build` (push main) | PASS — test + build amd64/arm64 |
 | 2026-10-16 | GitHub Actions `release` (tag `v0.1.0`) | PASS — 2 zip assets |
+| 2026-10-16 | Linux port: `go test ./config ./internal/session` + cross build | PASS (chưa chạy IBus) |

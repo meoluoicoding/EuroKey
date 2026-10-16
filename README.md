@@ -73,4 +73,29 @@ Không có lịch sử gõ, không telemetry.
 
 ## Nền tảng
 
-Milestone 1 chỉ có **Windows**. Logo hiện dùng tạm mascot của Tui Gõ.
+### Windows
+App chính (`eurokey.exe`): hook bàn phím mức thấp, khay hệ thống, HUD, cửa sổ cài đặt tự vẽ.
+
+### Linux (IBus)
+`linux/` — engine IBus thuần Go, dùng chung `engine/`:
+
+| Thành phần | Vai trò |
+|---|---|
+| `linux/cmd/eurokey-ibus` | IBus engine (preedit + commit), menu bật/tắt + chọn ngôn ngữ |
+| `linux/internal/session` | giữ từ đang soạn trong preedit (IBus không xoá được text đã commit) |
+| `linux/config` | `~/.config/eurokey/eurokey.ini` + `macro.txt` |
+| `linux/data/eurokey.xml` | component descriptor |
+| `linux/install.sh` / `uninstall.sh` | cài/gỡ cho user (hoặc `--system`) |
+
+```sh
+cd linux
+./install.sh        # hoặc ./install.sh --system
+ibus restart
+# Settings -> Keyboard -> Input Sources -> "EuroKey (Deutsch/Français/Español)"
+```
+
+Cross-build từ Windows/macOS: `GOOS=linux go build ./cmd/eurokey-ibus`.
+
+Chưa verify runtime trên Ubuntu (cần IBus thật) — xem `checks.md`.
+
+Logo hiện dùng tạm mascot của Tui Gõ.

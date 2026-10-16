@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IBus component descriptor. install.sh substitutes @PREFIX@ with the
+     install root (default ~/.local/lib/eurokey for user installs). -->
+<component>
+	<name>org.freedesktop.IBus.EuroKey</name>
+	<license>GPL-3.0-only</license>
+	<exec>@PREFIX@/eurokey-ibus --ibus</exec>
+	<version>0.1.0</version>
+	<author>EuroKey</author>
+	<description>Dead-key accent keyboard (German, French, Spanish)</description>
+	<engines>
+		<engine>
+			<name>eurokey</name>
+			<longname>EuroKey (Deutsch/Français/Español)</longname>
+			<description>Dead-key / compose input for German, French and Spanish</description>
+			<language>de</language>
+			<license>GPL-3.0-only</license>
+			<author>EuroKey</author>
+			<icon>@PREFIX@/logo.jpg</icon>
+			<layout>us</layout>
+			<symbol>DE</symbol>
+			<version>0.1.0</version>
+			<rank>1</rank>
+		</engine>
+	</engines>
+</component>

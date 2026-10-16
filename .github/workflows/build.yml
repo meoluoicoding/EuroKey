@@ -57,3 +57,14 @@ jobs:
           name: eurokey-windows-${{ matrix.goarch }}
           path: eurokey-windows-${{ matrix.goarch }}.exe
           if-no-files-found: error
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Linux port (vet + tests + cross build)
+        run: sh scripts/check-linux.sh
