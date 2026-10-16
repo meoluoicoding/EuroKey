@@ -20,10 +20,10 @@ jobs:
           cache: true
       - name: Vet
         run: go vet ./...
-      # UI tests open the real settings window and need an interactive desktop,
-      # so they are skipped in CI and run locally via scripts/check-eurokey.ps1.
+      # All tests run. The UI tests open the real settings window and skip
+      # themselves when the runner has no interactive desktop.
       - name: Test
-        run: go test ./... -count=1 -skip 'TestUi'
+        run: go test ./... -count=1
       - name: Vet e2e module
         working-directory: e2e
         run: go vet ./...
@@ -68,3 +68,22 @@ jobs:
           cache: true
       - name: Linux port (vet + tests + cross build)
         run: sh scripts/check-linux.sh
+
+  # End-to-end typing: rod opens a browser, OS-level SendInput types through the
+  # hook (EUROKEY_TEST_MAGIC), rod reads the value. Self-skips when the runner
+  # has no focusable desktop browser, so a skip is not a failure.
+  e2e:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build app
+        run: go build -trimpath -ldflags "-H windowsgui -s -w" -o eurokey.exe .
+      - name: End-to-end typing
+        working-directory: e2e
+        env:
+          EUROKEY_E2E: "1"
+        run: go test -run TestEuroKeyTyping -v -count=1
