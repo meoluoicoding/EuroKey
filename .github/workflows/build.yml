@@ -45,7 +45,13 @@ jobs:
           GOOS: windows
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: "0"
-        run: go build -trimpath -ldflags "-H windowsgui -s -w" -o eurokey-windows-${{ matrix.goarch }}.exe .
+        run: |
+          # The committed resource object is amd64-only (rsrc_amd64.syso); Go
+          # skips it for other architectures, so arm64 gets its own here.
+          if ('${{ matrix.goarch }}' -eq 'arm64') {
+            go run github.com/akavel/rsrc@v0.10.2 -arch arm64 -manifest app.manifest -ico app.ico -o rsrc_arm64.syso
+          }
+          go build -trimpath -ldflags "-H windowsgui -s -w" -o eurokey-windows-${{ matrix.goarch }}.exe .
       - uses: actions/upload-artifact@v4
         with:
           name: eurokey-windows-${{ matrix.goarch }}

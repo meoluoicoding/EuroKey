@@ -135,7 +135,7 @@ gửi phím vào cửa sổ đích rồi đọc lại nội dung để e2e thậ
 - **Chưa xem screenshot** cửa sổ Cài đặt/tray/HUD → chưa chứng minh layout đúng.
   Build + test không thay được kiểm tra thị giác.
 - **Chưa chạy e2e gõ thật** bằng tay ở mọi app; chỉ mới unit + UI in-process.
-- Icon/mascot vẫn là của Tui Gõ (chưa rebrand); `rsrc.syso` chưa regenerate.
+- Icon/mascot vẫn là của Tui Gõ (chưa rebrand); `rsrc_amd64.syso` chưa regenerate.
 
 Lịch sử chạy:
 
